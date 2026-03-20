@@ -1,0 +1,159 @@
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+    background: #f0f2f5;
+    color: #1c1e21;
+}
+
+.header-bar {
+    background: #ff6600;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+button {
+    background: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+
+.column {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+}
+
+h2 {
+    border-bottom: 2px solid #ff6600;
+    padding-bottom: 10px;
+    margin-top: 0;
+    color: #ff6600;
+}
+
+.item-list {
+    flex-grow: 1;
+    position: relative;
+}
+
+.item-card {
+    position: relative;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.item-card:hover {
+    background: #fff9f5;
+}
+
+.item-card a.main-link {
+    text-decoration: none;
+    color: #1c1e21;
+    font-weight: 500;
+    display: block;
+    font-size: 14px;
+}
+
+.info-card {
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    width: 280px;
+    background: #ffffff;
+    border: 1px solid #ff6600;
+    padding: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 1000;
+    pointer-events: none;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.item-card:hover .info-card {
+    display: block;
+}
+
+.info-line {
+    display: block;
+    font-size: 13px;
+    margin: 8px 0;
+    color: #333;
+    line-height: 1.5;
+    border-bottom: 1px solid #f9f9f9;
+    padding-bottom: 4px;
+}
+
+.info-line b {
+    color: #ff6600;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+}
+
+.info-line span,
+.info-line a {
+    display: block;
+    word-break: break-all;
+    color: #1c1e21;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.page-info {
+    font-size: 12px;
+    color: #666;
+    font-weight: bold;
+}
+
+.pager-btn {
+    background: #333;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: white;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
