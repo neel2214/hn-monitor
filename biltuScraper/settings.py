@@ -22,9 +22,10 @@ ADDONS = {}
 ROBOTSTXT_OBEY = True
 
 # Concurrency and throttling settings
-#CONCURRENT_REQUESTS = 16
-CONCURRENT_REQUESTS_PER_DOMAIN = 1
-DOWNLOAD_DELAY = 1
+CONCURRENT_REQUESTS = 32
+CONCURRENT_ITEMS = 100
+CONCURRENT_REQUESTS_PER_DOMAIN = 16
+DOWNLOAD_DELAY = 0.25  
 
 # Disable cookies (enabled by default)
 #COOKIES_ENABLED = False
@@ -86,3 +87,7 @@ ITEM_PIPELINES = {
 
 # Set settings whose default value is deprecated to a future-proof value
 FEED_EXPORT_ENCODING = "utf-8"
+
+# Speed optimizations
+DOWNLOAD_TIMEOUT = 10
+TELNETCONSOLE_ENABLED = False
