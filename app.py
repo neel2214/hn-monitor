@@ -14,7 +14,7 @@ def get_data_from_aiven():
             database="scraper",
             ssl_ca="ca.pem"
         )
-        
+        cursor = db.cursor(dictionary=True, buffered=True)        
         cursor.execute("SELECT * FROM hacker_news ORDER BY scraped_at DESC")
         rows = cursor.fetchall()
         db.close()

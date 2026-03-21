@@ -100,7 +100,7 @@ class MySQLPipeline:
             item.get('User_name'),
             item.get('User_url'),        
             item.get('Type'),
-            int(item.get('Comment_Count', 0))
+            int(item.get('Comment_Count'))
         )
 
         try:
