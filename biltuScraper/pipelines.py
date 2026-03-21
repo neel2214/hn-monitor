@@ -91,6 +91,13 @@ class MySQLPipeline:
         """
         
         
+        score = item.get('Score', 0)
+        comments = item.get('Comment_Count', 0)
+
+        
+        if str(comments).lower() == 'discuss' or not comments:
+            comments = 0
+
         values = (
             item.get('Header'),
             item.get('News_link'),
@@ -100,7 +107,7 @@ class MySQLPipeline:
             item.get('User_name'),
             item.get('User_url'),        
             item.get('Type'),
-            int(item.get('Comment_Count'))
+            int(comments)
         )
 
         try:
