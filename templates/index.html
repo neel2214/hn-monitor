@@ -202,98 +202,120 @@ h2 {
         </div>
     </div>
 
-    <script id="initial-data" type="application/json">
-        {{ news | tojson | safe }}
-    </script>
+<script>
+    let allData = [];
+    let currentPage = { news: 1, job: 1 };
+    const itemsPerPage = 12;
 
-    <script>
-        let allData = [];
-        let currentPage = { news: 1, job: 1 };
-        const itemsPerPage = 12;
+    // Load initial data from Flask
+    try {
+        allData = JSON.parse(document.getElementById('initial-data').textContent);
+    } catch (e) { 
+        allData = []; 
+    }
 
+    window.onload = renderAll;
+
+    // --- UPDATED FOR BACKGROUND THREADING ---
+    document.getElementById('runBtn').onclick = async function() {
+        const btn = this;
+        const status = document.getElementById('status');
+        
+        btn.disabled = true; 
+        status.innerText = "Requesting Scrape...";
+        
         try {
-            allData = JSON.parse(document.getElementById('initial-data').textContent);
-        } catch (e) { allData = []; }
-
-        window.onload = renderAll;
-
-        document.getElementById('runBtn').onclick = async function() {
-            const btn = this;
-            const status = document.getElementById('status');
-            btn.disabled = true; status.innerText = "Scraping...";
-            try {
-                const response = await fetch('/trigger-scrape', { method: 'POST' });
-                const newData = await response.json();
-                if (!newData.error) {
-                    allData = newData;
-                    currentPage = { news: 1, job: 1 };
-                    renderAll();
-                    status.innerText = "Updated!";
-                } else { status.innerText = "Error: " + newData.error; }
-            } catch (e) { status.innerText = "Failed."; }
-            finally { btn.disabled = false; }
-        };
-
-        function changePage(type, direction) {
-            currentPage[type] += direction;
-            renderAll();
-        }
-
-        function renderAll() {
-            renderSection('news-list', 'news');
-            renderSection('jobs-list', 'job');
-        }
-
-        function renderSection(elementId, filterType) {
-            const container = document.getElementById(elementId);
-            const pageLabel = document.getElementById(filterType + '-page-num');
+            const response = await fetch('/trigger-scrape', { method: 'POST' });
+            const result = await response.json();
             
-            const filtered = allData.filter(item => {
-                const type = (item.type || item.Type || "").toLowerCase();
-                return type.includes(filterType);
-            });
-
-            const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
-            if (currentPage[filterType] < 1) currentPage[filterType] = 1;
-            if (currentPage[filterType] > totalPages) currentPage[filterType] = totalPages;
-            
-            const start = (currentPage[filterType] - 1) * itemsPerPage;
-            const paginated = filtered.slice(start, start + itemsPerPage);
-
-            pageLabel.innerText = `Page ${currentPage[filterType]} of ${totalPages}`;
-
-            if (paginated.length === 0) {
-                container.innerHTML = `<p style="padding:20px; color:#999;">No ${filterType} entries.</p>`;
-                return;
-            }
-
-            container.innerHTML = paginated.map(item => {
+            if (result.status === "success") {
+                // Show the background message
+                status.innerText = "Running in Background...";
+                alert(result.message); 
                 
-                const h = item.Header || item.header || "N/A";
-                const l = item.News_link || item.news_link || "#";
-                const s = item.Source || item.source || "N/A";
-                const sc = item.Score || item.score || "0";
-                const sid = item.Score_id || item.score_id || "N/A";
-                const u = item.User_name || item.user_name || "N/A";
-                const ul = item.User_url || item.user_url || "#";
-                const c = item.Comment_Count || item.comment_count || "0";
+                // Optional: Re-enable button after a few seconds
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = "Run Scraper & Update";
+                    status.innerText = "Waiting for background task...";
+                }, 5000);
 
-                return `
-                    <div class="item-card">
-                        <a href="${l}" target="_blank" class="main-link">${h}</a>
-                        
-                        <div class="info-card">
-                            <div class="info-line"><b>Source:</b> ${s}</div>
-                            <div class="info-line"><b>Score:</b> ${sc}</div>
-                            <div class="info-line"><b>Score ID:</b> ${sid}</div>
-                            <div class="info-line"><b>Author:</b> <a href="https://news.ycombinator.com/${ul}" target="_blank">${u}</a></div>
-                            <div class="info-line"><b>Comments:</b> ${c}</div>
-                            <div class="info-line"><b>URL:</b> <span style="font-size:10px; word-break:break-all; color:#666;">${l}</span></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            } else { 
+                status.innerText = "Error: " + result.message; 
+                btn.disabled = false;
+            }
+        } catch (e) { 
+            status.innerText = "Failed to connect."; 
+            btn.disabled = false;
         }
-    </script>
+    };
+
+    function changePage(type, direction) {
+        // ... (Keep your existing changePage logic)
+        const filtered = allData.filter(item => {
+            const typeLower = (item.type || item.Type || "").toLowerCase();
+            return typeLower.includes(type);
+        });
+        const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+        
+        currentPage[type] += direction;
+        if (currentPage[type] < 1) currentPage[type] = 1;
+        if (currentPage[type] > totalPages) currentPage[type] = totalPages;
+        
+        renderAll();
+    }
+
+    function renderAll() {
+        renderSection('news-list', 'news');
+        renderSection('jobs-list', 'job');
+    }
+
+    function renderSection(elementId, filterType) {
+        const container = document.getElementById(elementId);
+        const pageLabel = document.getElementById(filterType + '-page-num');
+        
+        const filtered = allData.filter(item => {
+            const type = (item.type || item.Type || "").toLowerCase();
+            // Handle 'News' or 'Job Post' from your adapter logic
+            return type.includes(filterType) || (filterType === 'job' && type.includes('post'));
+        });
+
+        const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+        const start = (currentPage[filterType] - 1) * itemsPerPage;
+        const paginated = filtered.slice(start, start + itemsPerPage);
+
+        pageLabel.innerText = `Page ${currentPage[filterType]} of ${totalPages}`;
+
+        if (paginated.length === 0) {
+            container.innerHTML = `<p style="padding:20px; color:#999;">No ${filterType} entries.</p>`;
+            return;
+        }
+
+        container.innerHTML = paginated.map(item => {
+            const h = item.Header || item.header || "N/A";
+            const l = item.News_link || item.news_link || "#";
+            const s = item.Source || item.source || "N/A";
+            const sc = item.Score || item.score || "0";
+            const sid = item.Score_id || item.score_id || "N/A";
+            const u = item.User_name || item.user_name || "N/A";
+            const ul = item.User_url || item.user_url || "#";
+            const c = item.Comment_Count || item.comment_count || "0";
+
+            return `
+                <div class="item-card">
+                    <a href="${l}" target="_blank" class="main-link">${h}</a>
+                    <div class="info-card">
+                        <div class="info-line"><b>Source:</b> ${s}</div>
+                        <div class="info-line"><b>Score:</b> ${sc}</div>
+                        <div class="info-line"><b>Score ID:</b> ${sid}</div>
+                        <div class="info-line"><b>Author:</b> <a href="https://news.ycombinator.com/${ul}" target="_blank">${u}</a></div>
+                        <div class="info-line"><b>Comments:</b> ${c}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+</script>
+ 
 </body>
 </html>
