@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify
 import subprocess
 import mysql.connector
-import threading  
 
 app = Flask(__name__)
 
@@ -31,31 +30,12 @@ def home():
 
 @app.route('/trigger-scrape', methods=['POST'])
 def trigger_scrape():
-    """
-    This route starts the scraper in a separate thread 
-    so the web page doesn't time out while waiting for 600+ items.
-    """
-    def run_scraper_task():
-        try:
-            
-            subprocess.run("scrapy crawl biltuSpider", check=True, shell=True)
-            print("--- Scraper Task Completed Successfully ---")
-        except Exception as e:
-            print(f"--- Scraper Task Failed: {e} ---")
-
     try:
-        
-        scrape_thread = threading.Thread(target=run_scraper_task)
-        scrape_thread.start()
-
-        
-        return jsonify({
-            "status": "success",
-            "message": "Scraper started in the background! Please refresh the page in 30-40 seconds to see new news."
-        })
+        subprocess.run("scrapy crawl biltuSpider", check=True, shell=True)
+        fresh_data = get_data_from_aiven()
+        return jsonify(fresh_data)
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    
     app.run(debug=True, threaded=True)
