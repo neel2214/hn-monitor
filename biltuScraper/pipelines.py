@@ -6,6 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+import time
 
 
 class BiltuscraperPipeline:
@@ -117,11 +118,13 @@ class MySQLPipeline:
             print(f"Error saving to MySQL: {e}")
             
         return item
+    
 
     def close_spider(self, spider):
         
         self.curr.close()
         self.conn.close()
+        time.sleep(2)
             
 
         
