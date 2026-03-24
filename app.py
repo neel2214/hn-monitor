@@ -13,7 +13,7 @@ def get_data_from_aiven():
             user="avnadmin",
             password="AVNS_O-JyMlJ__uSoVpa3Uas",
             database="scraper",
-            ssl_ca="ca.pem"  # Ensure this file is in your root folder
+            ssl_ca="ca.pem" 
         )
         cursor = db.cursor(dictionary=True, buffered=True)        
         cursor.execute("SELECT * FROM hacker_news ORDER BY scraped_at DESC")
@@ -32,7 +32,6 @@ def home():
 @app.route('/trigger-scrape', methods=['GET', 'POST'])
 def trigger_scrape():
     try:
-        # Popen starts the process and returns immediately
         subprocess.Popen(
             ["scrapy", "crawl", "biltuSpider", "--nolog"], 
             stdout=subprocess.DEVNULL, 
@@ -45,6 +44,9 @@ def trigger_scrape():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# --- CRITICAL CHANGE FOR RENDER ---
 if __name__ == '__main__':
-    # threaded=True allows background tasks to run without freezing the UI
-    app.run(debug=True, threaded=True)
+    # Get port from environment or default to 5000
+    port = int(os.environ.get("PORT", 5000))
+    # host="0.0.0.0" is mandatory for Render/Docker to find the app
+    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
