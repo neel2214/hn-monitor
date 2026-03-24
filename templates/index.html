@@ -222,7 +222,7 @@
                         status.innerText = "Table updated!";
                     }, 2000);
                 } else {
-                    status.innerText = "Error: " + result.error;
+                    status.innerText = "Error: " + (result.e || "Unknown Error");
                 }
             } catch (e) {
                 status.innerText = "Triggered (Updating in background)";
