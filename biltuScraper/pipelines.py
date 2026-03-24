@@ -96,7 +96,7 @@ class MySQLPipeline:
         comments = item.get('Comment_Count', 0)
 
         
-        if str(comments).lower() in ['discuss', 'hide', '', 'none']:
+        if str(comments).lower() == 'discuss' or not comments
             comments = 0
 
         values = (
