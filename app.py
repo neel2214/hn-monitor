@@ -28,12 +28,17 @@ def home():
     news_data = get_data_from_aiven()
     return render_template('index.html', news=news_data)
 
-@app.route('/trigger-scrape', methods=['POST'])
+
+@app.route('/trigger-scrape', methods=['GET', 'POST'])
 def trigger_scrape():
     try:
-        subprocess.run("scrapy crawl biltuSpider", check=True, shell=True)
-        fresh_data = get_data_from_aiven()
-        return jsonify(fresh_data)
+        subprocess.run(
+            ["scrapy", "crawl", "biltuSpider", "--nolog"], 
+            check=True, 
+            stdout=subprocess.DEVNULL, 
+            stderr=subprocess.DEVNULL
+        )
+        return jsonify({"status": "success", "message": "Scrape finished and DB updated"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
