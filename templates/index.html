@@ -231,7 +231,10 @@ h2 {
                     status.innerText = "Updated!";
                 } else { status.innerText = "Error: " + newData.error; }
             } catch (e) { status.innerText = "Done"; }
-            finally { btn.disabled = false; }
+            finally { 
+                renderAll();
+                btn.disabled = false; 
+            }
         };
 
         function changePage(type, direction) {
