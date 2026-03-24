@@ -145,16 +145,25 @@
             const paginated = filtered.slice(start, start + itemsPerPage);
             pageLabel.innerText = `Page ${currentPage[filterType]} of ${totalPages}`;
 
-            container.innerHTML = paginated.map(item => `
-                <div class="item-card">
-                    <a href="${item.News_link || '#'}" target="_blank" class="main-link">${item.Header || 'N/A'}</a>
-                    <div class="info-card">
-                        <div class="info-line"><b>Score:</b> ${item.Score || 0}</div>
-                        <div class="info-line"><b>Author:</b> ${item.User_name || 'N/A'}</div>
-                        <div class="info-line"><b>Comments:</b> ${item.Comment_Count || 0}</div>
+            container.innerHTML = paginated.map(item => {
+               
+                const h = item.Header || item.header || "No Title";
+                const l = item.News_link || item.news_link || "#";
+                const sc = item.Score || item.score || "0";
+                const u = item.User_name || item.user_name || "N/A";
+                const c = item.Comment_Count || item.comment_count || "0";
+            
+                return `
+                    <div class="item-card">
+                        <a href="${l}" target="_blank" class="main-link">${h}</a>
+                        <div class="info-card">
+                            <div class="info-line"><b>Score:</b> ${sc}</div>
+                            <div class="info-line"><b>Author:</b> ${u}</div>
+                            <div class="info-line"><b>Comments:</b> ${c}</div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
     </script>
 </body>
