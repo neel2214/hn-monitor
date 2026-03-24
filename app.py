@@ -32,13 +32,17 @@ def home():
 @app.route('/trigger-scrape', methods=['GET', 'POST'])
 def trigger_scrape():
     try:
-        subprocess.run(
+        subprocess.Popen(
             ["scrapy", "crawl", "biltuSpider", "--nolog"], 
-            check=True, 
             stdout=subprocess.DEVNULL, 
             stderr=subprocess.DEVNULL
         )
-        return jsonify({"status": "success", "message": "Scrape finished and DB updated"}), 200
+
+        return jsonify({
+            "status": "success", 
+            "message": "Scraper triggered in background"
+        }), 200
+        
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
