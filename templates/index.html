@@ -262,25 +262,30 @@
             const paginated = filtered.slice(start, start + itemsPerPage);
             pageLabel.innerText = `Page ${currentPage[filterType]} of ${totalPages}`;
 
-            container.innerHTML = paginated.map(item => {
-               
-                const h = item.Header || item.header || "No Title";
-                const l = item.News_link || item.news_link || "#";
-                const sc = item.Score || item.score || "0";
-                const u = item.User_name || item.user_name || "N/A";
-                const c = item.Comment_Count || item.comment_count || "0";
-            
-                return `
-                    <div class="item-card">
-                        <a href="${l}" target="_blank" class="main-link">${h}</a>
-                        <div class="info-card">
-                            <div class="info-line"><b>Score:</b> ${sc}</div>
-                            <div class="info-line"><b>Author:</b> ${u}</div>
-                            <div class="info-line"><b>Comments:</b> ${c}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+container.innerHTML = paginated.map(item => {
+    
+    const h = item.header || item.Header || "No Title";
+    const l = item.news_link || item.News_link || "#";
+    const src = item.source || item.Source || "N/A";
+    const sc = item.score || item.Score || "0";
+    const sid = item.score_id || item.Score_id || "N/A";
+    const u = item.user_name || item.User_name || "N/A";
+    const u_url = item.user_url || item.User_url || "#";
+    const c = item.comment_count || item.Comment_Count || "0";
+
+    return `
+        <div class="item-card">
+            <a href="${l}" target="_blank" class="main-link">${h}</a>
+            <div class="info-card">
+                <div class="info-line"><b>Score:</b> ${sc}</div>
+                <div class="info-line"><b>Score ID:</b> ${sid}</div>
+                <div class="info-line"><b>Source:</b> ${src}</div>
+                <div class="info-line"><b>Author:</b> <a href="${u_url}" target="_blank" style="color:#ff6600">${u}</a></div>
+                <div class="info-line"><b>Comments:</b> ${c}</div>
+            </div>
+        </div>
+    `;
+}).join('');
         }
     </script>
 </body>
