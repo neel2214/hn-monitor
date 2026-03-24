@@ -2,8 +2,26 @@ from flask import Flask, render_template, jsonify
 import subprocess
 import mysql.connector
 import os
+import threading
+import requests
+import time
 
 app = Flask(__name__)
+
+def keep_alive():
+    """Pings the server every 10 minutes to prevent Render sleep."""
+    while True:
+        try:
+
+            requests.get("http://127.0.0.1:5000/health")
+        except:
+            pass
+        time.sleep(600) 
+
+@app.route('/health')
+def health():
+    return "Alive", 200
+
 
 def get_data_from_aiven():
     try:
@@ -32,19 +50,22 @@ def home():
 @app.route('/trigger-scrape', methods=['GET', 'POST'])
 def trigger_scrape():
     try:
+
         subprocess.Popen(
             ["scrapy", "crawl", "biltuSpider", "--nolog"], 
             stdout=subprocess.DEVNULL, 
-            stderr=subprocess.DEVNULL
+            stderr=subprocess.DEVNULL,
+            start_new_session=True 
         )
-        return jsonify({
-            "status": "success", 
-            "message": "Scraper triggered in background"
-        }), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
+        return jsonify({"s": "ok"}), 202
+    except Exception as e:
+        return jsonify({"e": str(e)}), 500
 
 if __name__ == '__main__':  
+    
+    if os.environ.get("RENDER") or not os.environ.get("DEBUG"):
+        threading.Thread(target=keep_alive, daemon=True).start()
+        
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
