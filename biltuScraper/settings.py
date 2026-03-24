@@ -95,3 +95,5 @@ TELNETCONSOLE_ENABLED = False
 #comment these to see full log
 LOG_LEVEL = 'WARNING'
 LOG_STDOUT = False
+
+CLOSESPIDER_TIMEOUT = 20
