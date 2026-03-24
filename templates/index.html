@@ -4,174 +4,30 @@
     <meta charset="UTF-8">
     <title>HN Real-Time Monitor</title>
     <style>
-
-        body {
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    margin: 0;
-    background: #f0f2f5;
-    color: #1c1e21;
-}
-
-.header-bar {
-    background: #ff6600;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.container {
-    max-width: 1200px; /* Wider container to fit two columns */
-    margin: 20px auto;
-    padding: 0 20px;
-}
-.controls {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-button {
-    background: #ff6600;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 30px;
-}
-
-.column {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    min-height: 600px; 
-}
-
-h2 {
-    border-bottom: 2px solid #ff6600;
-    padding-bottom: 10px;
-    margin-top: 0;
-    color: #ff6600;
-}
-
-.item-list {
-    flex-grow: 1;
-    position: relative;
-}
-
-.item-card {
-    position: relative;
-    padding: 15px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.item-card:hover {
-    background: #fff9f5;
-}
-
-.item-card a.main-link {
-    text-decoration: none;
-    color: #1c1e21;
-    font-weight: 500;
-    display: block;
-    font-size: 14px;
-}
-
-.info-card {
-    display: none;
-    position: absolute;
-    top: 40px;
-    left: 20px;
-    width: 280px;
-    background: #ffffff;
-    border: 1px solid #ff6600;
-    padding: 15px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    z-index: 1000;
-    pointer-events: none;
-    border-radius: 8px;
-    text-align: left;
-}
-
-.item-card:hover .info-card {
-    display: block;
-}
-
-.info-line {
-    display: block;
-    font-size: 13px;
-    margin: 8px 0;
-    color: #333;
-    line-height: 1.5;
-    border-bottom: 1px solid #f9f9f9;
-    padding-bottom: 4px;
-}
-
-.info-line b {
-    color: #ff6600;
-    display: block;
-    margin-bottom: 2px;
-    text-transform: uppercase;
-    font-size: 10px;
-    letter-spacing: 0.5px;
-}
-
-.info-line span,
-.info-line a {
-    display: block;
-    word-break: break-all;
-    color: #1c1e21;
-}
-
-.pagination-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-}
-
-.page-info {
-    font-size: 12px;
-    color: #666;
-    font-weight: bold;
-}
-
-.pager-btn {
-    background: #333;
-    padding: 5px 12px;
-    font-size: 11px;
-    color: white;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-}
-
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: #f0f2f5; color: #1c1e21; }
+        .header-bar { background: #ff6600; color: white; padding: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .controls { margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
+        button { background: #ff6600; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; font-weight: bold; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .column { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); min-height: 600px; display: flex; flex-direction: column; }
+        h2 { border-bottom: 2px solid #ff6600; padding-bottom: 10px; margin-top: 0; color: #ff6600; }
+        .item-list { flex-grow: 1; position: relative; }
+        .item-card { position: relative; padding: 15px; border-bottom: 1px solid #f0f0f0; }
+        .item-card:hover { background: #fff9f5; }
+        .item-card a.main-link { text-decoration: none; color: #1c1e21; font-weight: 500; font-size: 14px; display: block; }
+        .info-card { display: none; position: absolute; top: 40px; left: 20px; width: 280px; background: white; border: 1px solid #ff6600; padding: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 1000; border-radius: 8px; }
+        .item-card:hover .info-card { display: block; }
+        .info-line { font-size: 12px; margin: 5px 0; color: #333; }
+        .info-line b { color: #ff6600; text-transform: uppercase; font-size: 10px; }
+        .pagination-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+        .pager-btn { background: #333; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
     </style>
-    
 </head>
 <body>
 
-    <div class="header-bar">
-        <h1>HN Real-Time Monitor</h1>
-    </div>
+    <div class="header-bar"><h1>HN Real-Time Monitor</h1></div>
 
     <div class="container">
         <div class="controls">
@@ -185,26 +41,23 @@ h2 {
                 <div id="news-list" class="item-list"></div>
                 <div class="pagination-controls">
                     <button class="pager-btn" onclick="changePage('news', -1)">Prev</button>
-                    <span class="page-info" id="news-page-num">Page 1</span>
+                    <span id="news-page-num" class="page-info">Page 1</span>
                     <button class="pager-btn" onclick="changePage('news', 1)">Next</button>
                 </div>
             </div>
-
             <div class="column">
-                <h2>Job Opportunities</h2>
+                <h2>Jobs</h2>
                 <div id="jobs-list" class="item-list"></div>
                 <div class="pagination-controls">
                     <button class="pager-btn" onclick="changePage('job', -1)">Prev</button>
-                    <span class="page-info" id="job-page-num">Page 1</span>
+                    <span id="job-page-num" class="page-info">Page 1</span>
                     <button class="pager-btn" onclick="changePage('job', 1)">Next</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script id="initial-data" type="application/json">
-        {{ news | tojson | safe }}
-    </script>
+    <script id="initial-data" type="application/json">{{ news | tojson | safe }}</script>
 
     <script>
         let allData = [];
@@ -217,23 +70,48 @@ h2 {
 
         window.onload = renderAll;
 
+        // NEW: Function to pull the newest DB rows without a page refresh
+        async function updateTableFromDB() {
+            try {
+                const response = await fetch('/');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const freshJson = JSON.parse(doc.getElementById('initial-data').textContent);
+                
+                if (Array.isArray(freshJson)) {
+                    allData = freshJson;
+                    renderAll();
+                    return true;
+                }
+            } catch (e) { console.error("Update failed", e); }
+            return false;
+        }
+
         document.getElementById('runBtn').onclick = async function() {
             const btn = this;
             const status = document.getElementById('status');
-            btn.disabled = true; status.innerText = "Scraping...";
+            btn.disabled = true; status.innerText = "Triggering Scraper...";
+
             try {
                 const response = await fetch('/trigger-scrape', { method: 'POST' });
-                const newData = await response.json();
-                if (!newData.error) {
-                    allData = newData;
-                    currentPage = { news: 1, job: 1 };
-                    renderAll();
-                    status.innerText = "Updated!";
-                } else { status.innerText = "Error: " + newData.error; }
-            } catch (e) { status.innerText = "Done"; }
-            finally { 
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    status.innerText = "Scraper active! Fetching DB rows...";
+                    // Wait 2 seconds for the scraper to start, then pull DB data
+                    setTimeout(async () => {
+                        await updateTableFromDB();
+                        status.innerText = "Table updated!";
+                    }, 2000);
+                } else {
+                    status.innerText = "Error: " + result.error;
+                }
+            } catch (e) {
+                status.innerText = "Triggered (Updating in background)";
+            } finally {
+                btn.disabled = false;
                 renderAll();
-                btn.disabled = false; 
             }
         };
 
@@ -251,6 +129,9 @@ h2 {
             const container = document.getElementById(elementId);
             const pageLabel = document.getElementById(filterType + '-page-num');
             
+            // Safety: if allData isn't an array, don't crash
+            if (!Array.isArray(allData)) return;
+
             const filtered = allData.filter(item => {
                 const type = (item.type || item.Type || "").toLowerCase();
                 return type.includes(filterType);
@@ -262,40 +143,18 @@ h2 {
             
             const start = (currentPage[filterType] - 1) * itemsPerPage;
             const paginated = filtered.slice(start, start + itemsPerPage);
-
             pageLabel.innerText = `Page ${currentPage[filterType]} of ${totalPages}`;
 
-            if (paginated.length === 0) {
-                container.innerHTML = `<p style="padding:20px; color:#999;">No ${filterType} entries.</p>`;
-                return;
-            }
-
-            container.innerHTML = paginated.map(item => {
-                
-                const h = item.Header || item.header || "N/A";
-                const l = item.News_link || item.news_link || "#";
-                const s = item.Source || item.source || "N/A";
-                const sc = item.Score || item.score || "0";
-                const sid = item.Score_id || item.score_id || "N/A";
-                const u = item.User_name || item.user_name || "N/A";
-                const ul = item.User_url || item.user_url || "#";
-                const c = item.Comment_Count || item.comment_count || "0";
-
-                return `
-                    <div class="item-card">
-                        <a href="${l}" target="_blank" class="main-link">${h}</a>
-                        
-                        <div class="info-card">
-                            <div class="info-line"><b>Source:</b> ${s}</div>
-                            <div class="info-line"><b>Score:</b> ${sc}</div>
-                            <div class="info-line"><b>Score ID:</b> ${sid}</div>
-                            <div class="info-line"><b>Author:</b> <a href="https://news.ycombinator.com/${ul}" target="_blank">${u}</a></div>
-                            <div class="info-line"><b>Comments:</b> ${c}</div>
-                            <div class="info-line"><b>URL:</b> <span style="font-size:10px; word-break:break-all; color:#666;">${l}</span></div>
-                        </div>
+            container.innerHTML = paginated.map(item => `
+                <div class="item-card">
+                    <a href="${item.News_link || '#'}" target="_blank" class="main-link">${item.Header || 'N/A'}</a>
+                    <div class="info-card">
+                        <div class="info-line"><b>Score:</b> ${item.Score || 0}</div>
+                        <div class="info-line"><b>Author:</b> ${item.User_name || 'N/A'}</div>
+                        <div class="info-line"><b>Comments:</b> ${item.Comment_Count || 0}</div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `).join('');
         }
     </script>
 </body>
