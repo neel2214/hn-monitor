@@ -44,9 +44,7 @@ def trigger_scrape():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# --- CRITICAL CHANGE FOR RENDER ---
-if __name__ == '__main__':
-    # Get port from environment or default to 5000
+
+if __name__ == '__main__':  
     port = int(os.environ.get("PORT", 5000))
-    # host="0.0.0.0" is mandatory for Render/Docker to find the app
     app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
